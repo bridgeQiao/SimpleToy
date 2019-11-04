@@ -16,7 +16,7 @@ details.
 #include <random>
 #include <stack>
 using namespace std;
-const unsigned length = 9;
+unsigned length = 9;
 array<int, length * length> chess{ 0 };    // store the chess board
 array<bool, length * length> bchess{ 0 };  // for output, 1 refer to be checked
 bool overd = false;                      // if the game is over
