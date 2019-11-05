@@ -55,13 +55,20 @@ int main() {
 			n input the number of booms
 */
 void generate_booms(unsigned n) {
+	// random engine
 	default_random_engine e;
-	e.seed(time(NULL));
+	e.seed(static_cast<unsigned>(time(NULL)));
 	uniform_int_distribution<unsigned> gen(0, length * length - 1);
 	unsigned pos;
-	for (unsigned i = 0; i < n; ++i) {
+
+	// generate n booms
+	unsigned count = 0;
+	while (count != n) {
 		pos = gen(e);
-		if (chess[pos] != -1) chess[pos] = -1;
+		if (chess[pos] != -1) {
+			chess[pos] = -1;
+			++count;
+		}
 	}
 }
 
@@ -123,11 +130,11 @@ void show_chess() {
 	}
 }
 
-// -----------------------------------------------------------
-//   Update chess. If the check position isn't 0, just set the 
-// position of bchess to true. If the position is 0, check surround
-// positions, find the all zeros and set the value to true.
-//------------------------------------------------------------
+/* ----------------------------------------------------------------------------
+   Update chess. If the check position isn't 0, just set the
+ position of bchess to true. If the position is 0, check surround
+ positions, find the all zeros and set the value to true.
+---------------------------------------------------------------------------- */
 stack<array<int, 2>> zeros;
 
 // add pos to zeros
@@ -182,6 +189,8 @@ void update_chess(int x, int y) {
 		}
 	}
 }
+
+// ----------------------------------------------------------------------------
 
 /*
 		method: find all mines
