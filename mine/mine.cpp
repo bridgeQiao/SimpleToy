@@ -16,26 +16,26 @@ details.
 #include <random>
 #include <stack>
 using namespace std;
-unsigned length = 9;
+const unsigned length = 9;
 array<int, length * length> chess{ 0 };    // store the chess board
 array<bool, length * length> bchess{ 0 };  // for output, 1 refer to be checked
-bool overd = false;                      // if the game is over
-unsigned number = 5;                    // default the number of booms is 5
-void generate_booms(unsigned n);         // generate booms assigned with -1
-void generate_number();                  // generate number of booms surranded
+bool overd = false;                        // if the game is over
+unsigned number = 5;                       // default the number of booms is 5
+void generate_booms(unsigned n);           // generate booms assigned with -1
+void generate_number();                    // generate number of booms surranded
 void show_chess();
 void update_chess(int x, int y);
 bool find_all_mine();
 int main() {
 	int x, y;
-	cout << "the length of bound, and the number of mine: ";
-	cin >> number >> number;
+	cout << "the length of bound is " << length << ", and the number of mine: ";
+	cin >> number;
 	generate_booms(number);
 	generate_number();
 	while (!overd) {
 		show_chess();
 		if (find_all_mine()) break;
-		cout << "Please input two number, example: 0 0, between 0 ~ "<< length-1 << endl;
+		cout << "Please input two number, example: 0 0, between 0 ~ " << length - 1 << endl;
 		cin >> x >> y;
 		if (0 <= x && x < length && 0 <= y && y < length) {
 			update_chess(x, y);
@@ -49,6 +49,11 @@ int main() {
 	return 0;
 }
 
+/*
+		method: generate booms
+		args:
+			n input the number of booms
+*/
 void generate_booms(unsigned n) {
 	default_random_engine e;
 	e.seed(time(NULL));
@@ -101,7 +106,7 @@ void show_chess() {
 	// first line
 	cout << "    ";
 	for (unsigned j = 0; j < length; ++j)
-		cout << setw(2) << j <<"    ";
+		cout << setw(2) << j << "    ";
 	cout << endl;
 	cout << "  -------------------------------------------------------\n";
 	// other lines
@@ -118,6 +123,11 @@ void show_chess() {
 	}
 }
 
+// -----------------------------------------------------------
+//   Update chess. If the check position isn't 0, just set the 
+// position of bchess to true. If the position is 0, check surround
+// positions, find the all zeros and set the value to true.
+//------------------------------------------------------------
 stack<array<int, 2>> zeros;
 
 // add pos to zeros
@@ -143,7 +153,7 @@ void find_zero(int x, int y) {
 	// left and right position
 	if (y - 1 >= 0)  add_to_zeros(x, y - 1);
 	if (y + 1 < length)  add_to_zeros(x, y + 1);
-	// down line
+	// lower line
 	if (x + 1 < length) {
 		if (y - 1 >= 0)
 			add_to_zeros(x + 1, y - 1);
@@ -173,6 +183,10 @@ void update_chess(int x, int y) {
 	}
 }
 
+/*
+		method: find all mines
+			if all mine was found, return true.
+*/
 bool find_all_mine()
 {
 	unsigned count = 0;
